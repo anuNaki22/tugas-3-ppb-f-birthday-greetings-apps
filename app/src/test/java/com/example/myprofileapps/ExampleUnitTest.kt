@@ -1,4 +1,4 @@
-package com.example.myprofileapps
+package com.example.birthdaygreetingsapps
 
 import org.junit.Test
 

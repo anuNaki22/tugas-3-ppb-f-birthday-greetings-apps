@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.myprofileapps'
+    namespace 'com.example.birthdaygreetingsapps'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.myprofileapps"
+        applicationId "com.example.birthdaygreetingsapps"
         minSdk 26
         targetSdk 34
         versionCode 1

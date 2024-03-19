@@ -1,17 +1,17 @@
-package com.example.myprofileapps
+package com.example.birthdaygreetingsapps
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+//import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+//import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+//import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,327 +23,117 @@ import androidx.compose.runtime.Composable
 //import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.background
-import androidx.compose.foundation.lazy.LazyColumn
+//import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.*
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
+//import androidx.compose.animation.*
+//import androidx.compose.animation.core.*
 //import kotlin.math.ceil
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import com.example.birthdaygreetingsapps.R
 
+//import androidx.compose.ui.res.painterResource
 
-data class ProfileData(
-    val name: String,
-    val jobTitle: String,
-    val location: String,
-    val email: String,
-    val phone: String,
-    val about: String,
-    val skills: List<String>,
-    val projects: List<Project>
+private val RedThemeColors = lightColors(
+    primary = Color(0xFFF44336), // Merah terang
+    primaryVariant = Color(0xFFD32F2F), // Merah sedikit lebih gelap
+    secondary = Color(0xFFFFC107) // Amber sebagai warna sekunder
 )
 
-data class Project(
-    val title: String,
-    val description: String,
-    val imageUrl: Int
-)
-
-val dummyProfile = ProfileData(
-    name = "Rahmat Faris Akbar",
-    jobTitle = "Frontend Developer",
-    location = "Surabaya, Indonesia",
-    email = "email@mail.com",
-    phone = "+1234567890",
-    about = "Passionate Frontend developer with experience in building, integrating, testing, and supporting web applications. Skilled in modern JavaScript frameworks and libraries, responsive design, and building user-centric interfaces.",
-    skills = listOf("CSS", "HTML", "JavaScript", "React", "Responsive Design", "NextJS", "C/C++", "Mathematics"),
-    projects = listOf(
-        Project(
-            title = "Project Aplikasi ToDo List App",
-            description = "Sebuah website yang memudahkan kita mencatat hal yang perlu dilakukan.",
-            imageUrl = R.drawable.project_1
-        ),
-        Project(
-            title = "Project Website Landing Adapter HIX",
-            description = "Sebuah website untuk branding dan berlangganan Adapter App.",
-            imageUrl = R.drawable.project_2
-        ),
-        Project(
-            title = "Project Aplikasi Adapter Satu Sehat",
-            description = "Sebuah aplikasi adapter untuk menjembatani proses ETL data RS ke Satu Sehat.",
-            imageUrl = R.drawable.project_3
-        ),
-        Project(
-            title = "Project Parking Lot Detector & Counter",
-            description = "Sebuah aplikasi pendeteksi dan penghitung area parkir yang masih kosong.",
-            imageUrl = R.drawable.project_4
-        ),
+@Composable
+fun RedTheme(content: @Composable () -> Unit) {
+    MaterialTheme(
+        colors = RedThemeColors,
+//        typography = Typography,
+//        shapes = Shapes,
+        content = content
     )
-)
+}
 
+// Fungsi untuk halaman ucapan "Happy Birthday"
+@Composable
+fun BirthdayGreetingPage() {
+    var isGiftOpened by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // Conditional rendering for the "Happy Birthday Kamu!" text
+        if (isGiftOpened) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFFEC407A), // Light Pink
+                                Color(0xFFB71C1C) // Dark Red
+                            )
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "Happy Birthday Kamu!",
+                    color = Color.White,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h5
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Image of the gift
+        Image(
+            painter = if (isGiftOpened) painterResource(id = R.drawable.gift_opened) else painterResource(id = R.drawable.gift_closed),
+            contentDescription = if (isGiftOpened) "Opened Gift" else "Closed Gift",
+            modifier = Modifier.size(width = if (isGiftOpened) 300.dp else 200.dp, height = if (isGiftOpened) 300.dp else 200.dp)
+        )
+
+        // Text "from Rahmat" below the gift
+        if (isGiftOpened) {
+            Text(
+                text = "from: Rahmat Faris Akbar",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Light,
+                color = Color.Gray,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Button to open/close the gift
+        Button(
+            onClick = { isGiftOpened = !isGiftOpened },
+            modifier = Modifier.padding(top = 8.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFEC407A))
+        ) {
+            Text(
+                if (isGiftOpened) "Close Gift" else "Open Gift",
+                color = Color.White
+            )
+        }
+    }
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
-                Surface(color = MaterialTheme.colors.background) {
-                    ProfileScreen(dummyProfile)
-                }
+            RedTheme {
+                BirthdayGreetingPage()
             }
         }
-    }
-}
-
-@Composable
-fun TopProfileSection(profileData: ProfileData) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
-        shape = RoundedCornerShape(10.dp),
-        elevation = 4.dp
-    ) {
-        Box {
-            // Membuat background gradient
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color(0xFFE1BEE7), // Warna ungu di atas
-                                Color.White // Transparan di bawah
-                            ),
-                            startY = 10f // Atur nilai ini untuk menyesuaikan di mana warna mulai berubah menjadi transparan
-                        )
-                    )
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.profile_picture),
-                    contentDescription = "Profile picture",
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .border(1.dp, Color(0xFFE1BEE7), CircleShape)
-                        .align(Alignment.CenterHorizontally)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = profileData.name,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.primary,
-                    modifier = Modifier.wrapContentSize()
-                )
-                Text(text = profileData.jobTitle, style = MaterialTheme.typography.subtitle1)
-                Text(text = profileData.location, style = MaterialTheme.typography.caption)
-
-                // Menambahkan informasi kontak
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Email: ${profileData.email}", style = MaterialTheme.typography.body1)
-                Text(text = "Phone: ${profileData.phone}", style = MaterialTheme.typography.body1)
-            }
-        }
-    }
-}
-
-@Composable
-fun AboutSection(profileData: ProfileData) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        shape = RoundedCornerShape(10.dp),
-        elevation = 4.dp
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("About Me", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = profileData.about, style = MaterialTheme.typography.body1)
-        }
-    }
-}
-
-@Composable
-fun SkillsSection(skills: List<String>) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
-        shape = RoundedCornerShape(10.dp),
-        elevation = 4.dp
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("Skills", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Assuming each row can fit 2 items for simplicity. Adjust based on your UI needs.
-            val numRows = (skills.size + 1) / 2 // Calculate the number of rows needed
-            Column {
-                for (i in 0 until numRows) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        val startIndex = i * 2
-                        for (j in startIndex until startIndex + 2) {
-                            if (j < skills.size) {
-                                ChipView(skill = skills[j])
-                                Spacer(modifier = Modifier.width(8.dp)) // Space between chips
-                            }
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(8.dp)) // Space between rows
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ProfileScreen(profileData: ProfileData) {
-    var showDialog by remember { mutableStateOf(true) } // Dialog ditampilkan saat pertama kali
-
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item {
-            // Komponen Header Anda
-            TopProfileSection(profileData)
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-        item { AboutSection(profileData) }
-        item { Spacer(modifier = Modifier.height(10.dp)) }
-        item { SkillsSection(profileData.skills) }
-        item { ProjectsSection(profileData.projects) }
-    }
-
-    if (showDialog) {
-        HelloWorldDialog { showDialog = false }
-    }
-}
-
-@Composable
-fun HelloWorldDialog(onDismissRequest: () -> Unit) {
-    AnimatedVisibility(
-        visible = true,
-        enter = fadeIn(initialAlpha = 0.4f),
-        exit = fadeOut()
-    ) {
-        AlertDialog(
-            onDismissRequest = onDismissRequest,
-            title = {
-                Text(
-                    text = "Welcome",
-                    color = MaterialTheme.colors.primary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            },
-            text = {
-                Text(
-                    "Hello World! This is My Profile Apps",
-                    style = MaterialTheme.typography.body1
-                )
-            },
-            confirmButton = {
-                Button(
-                    onClick = onDismissRequest,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
-                ) {
-                    Text(
-                        "Read My Profile  ⟫",
-                        color = Color.White
-                    )
-                }
-            },
-            backgroundColor = Color.White,
-            contentColor = Color.Black,
-        )
-    }
-}
-
-@Composable
-fun ProjectsSection(projects: List<Project>) {
-    Column(modifier = Modifier.fillMaxWidth().padding(12.dp)) {
-        Text(
-            "Projects",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
-        )
-        // Process projects in pairs
-        projects.chunked(2).forEachIndexed { index, rowProjects ->
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                rowProjects.forEachIndexed { rowIndex, project ->
-                    // Adjust modifier to add end padding to all cards except the last one in the row
-                    val isLastInRow = rowIndex == rowProjects.size - 1
-                    val cardModifier = Modifier
-                        .weight(1f)
-                        .let { if (isLastInRow && rowProjects.size > 1) it.padding(end = 8.dp) else it }
-                    ProjectCard(project = project, modifier = cardModifier)
-                }
-                // Fill the remaining space if there's an odd number of projects to keep the layout consistent
-                if (rowProjects.size == 1 && index != projects.chunked(2).lastIndex) {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-            }
-            // Add vertical spacing between rows if not the last row
-            if (index != projects.chunked(2).lastIndex) {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-        }
-    }
-}
-
-@Composable
-fun ProjectCard(project: Project, modifier: Modifier = Modifier) {
-    // Use the modifier parameter passed to ProjectCard
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
-        elevation = 4.dp
-    ) {
-        Column(modifier = Modifier.padding(8.dp)) {
-            Image(
-                painter = painterResource(id = project.imageUrl),
-                contentDescription = project.title,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = project.title,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = project.description,
-                style = MaterialTheme.typography.body2
-            )
-        }
-    }
-}
-
-@Composable
-fun ChipView(skill: String) {
-    Surface(
-        modifier = Modifier
-            .padding(end = 8.dp), // Add padding to the end of each chip for spacing
-        shape = RoundedCornerShape(50.dp),
-        color = MaterialTheme.colors.primary.copy(alpha = 0.2f)
-    ) {
-        Text(
-            text = skill,
-            modifier = Modifier.padding(8.dp),
-            color = MaterialTheme.colors.primary,
-            style = MaterialTheme.typography.body2
-        )
     }
 }
